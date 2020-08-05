@@ -34,9 +34,9 @@ These scripts use bootstrapping to estimate uncertainty in the estimates of the 
 
 These scripts visualize the uncertainty in the parameter estimates of the best-fitting growth and dispersal models. They can be used to recreate Figs. S7, S8.
 
-### analysis-simulations-long.R
+### analysis-simulations-long.R, analysis-simulations-long-sensitivity-alphanm.R
 
-This script simulates the spatiotemporal models in large 200-patch landscapes for 100 generations.
+These scripts simulate the spatiotemporal models in large 200-patch landscapes for 100 generations. The sensitivity script can be modified to examine the sensitivity of any parameter in the model (i.e., not just alpha_nm) across a range of values (see object `prop.range`). Note that the files created by these scripts are fairly large: 400-700 MB for each parameter set.
 
 ### results-figure1.R
 
