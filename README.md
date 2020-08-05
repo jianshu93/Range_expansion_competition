@@ -44,4 +44,8 @@ This script visualizes mean abundance over time for the experimental landscapes.
 
 ### results-figure2.R
 
-This script visualizes mean abundance over time for the long-term (100 generations) simulations. It requires that this data exist in folder /Data and can be used to recreate Figure 2 in the main text.
+This script compares abundances predicted by the fitted model with abundances in the experimental landscapes. It can be used to recreate Figure 2 in the main text.
+
+### results-figure3.R
+
+This script visualizes mean abundance over time for the long-term (100 generations) simulations. It requires that this data exist in folder /Data and can be used to recreate Figure 3 in the main text.
