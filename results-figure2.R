@@ -11,7 +11,7 @@ colnames(dataM.wetcomp) <- c("Replicate", "Generation", 1:16)
 landscapes <- read.csv("Data/data-counts.csv", header = T, stringsAsFactors = F)
 
 ## Generations
-gens <- c(1:8)
+gens <- c(8)
 
 ### No comp
 stor.wetnocomp <- data.frame()
@@ -62,14 +62,12 @@ stor.wetcomp2$Mean[stor.wetcomp2$Mean == 0] <- NA
 # Plotting parameters
 col.cast <- rgb(131 / 255, 139 / 255, 139 / 255, alpha = .7) # colors of 95% interval
 col.conf <- rgb(210 / 255, 105 / 255, 30 / 255, alpha = .7) # color of 95% interval
-gens <- c(1:8)
-xlabels <- c(rep("", 4), rep("Patch number", 4))
-ylabels <- c("Abundance", "", "", "", "Abundance", "", "", "")
+
+pdf(file = "Figs/Figure 2.pdf", width = 17, height = 8, onefile = TRUE)
 
 # No Competition
 ## Make pdf
-pdf(file = "NoCompetition-NoRestart.pdf", width = 16, height = 8, onefile = TRUE)
-par(mfrow = c(2, 4), mar = c(4, 1.5, 2, 0), oma = c(1, 3, 0, 0)) # 2 rows, 4 columns
+par(mfrow = c(1, 2), mar = c(5, 5, 2, 0), oma = c(1, 3, 0, 0))
 ## Plotting loop
 for(h in 1:length(gens)){
     temp.current <- subset(landscapes, TREATMENT == "A" & GENERATION == gens[h])
@@ -78,35 +76,22 @@ for(h in 1:length(gens)){
     ## Plot real data
     plot(NA, xlim = c(1, 16), ylim = c(0, 700),
          xaxt = "n", yaxt = "n", bty = "n",
-         ylab = ylabels[h], xlab = xlabels[h], cex.lab = 1.5)
-    axis(1, at = seq(1, 16, 1), tcl = -.5, cex = .95)
-    if(h == 1 | h == 5){
-        axis(2, at = seq(0, 700, 100), tcl = -.5, pos = .7, las = 1)
-    } else{
-        axis(2, at = seq(0, 700, 100), tcl = -.5, pos = .7, labels = FALSE)
-    }
+         ylab = "Abundance", xlab = "Patch number", cex.lab = 1.4)
+    axis(1, at = seq(1, 16, 1), tcl = -.5)
+    axis(2, at = seq(0, 700, 100), tcl = -.5, pos = .5, las = 1)
     nonzeroesN <- which(tempN.simulation$Mean > 0)
-    polygon(x = c(nonzeroesN, rev(nonzeroesN)), y = c(tempN.simulation[nonzeroesN, "Lower"], rev(tempN.simulation[nonzeroesN, "Upper"])), col = col.cast, border = "black", lty = NULL)
+    polygon(x = c(nonzeroesN, rev(nonzeroesN)), y = c(tempN.simulation[nonzeroesN, "Lower"], rev(tempN.simulation[nonzeroesN, "Upper"])), col = col.cast, border = NA)
     for(i in 1:length(refs.current)){
         temp.real <- subset(temp.current, REFERENCE_ID == refs.current[i] & CASTCOUNT > 0)
         temp.real <- temp.real[order(temp.real$PATCH), ]
         points(CASTCOUNT ~ PATCH, data = temp.real, type = "l", pch = 15)
-        points(CASTCOUNT ~ PATCH, data = temp.real, type = "p", pch = 15, cex = 0.8)
+        points(CASTCOUNT ~ PATCH, data = temp.real, type = "p", pch = 15, cex = 1)
     }
-    if(h == 1 | h == 5){
-        mtext(side = 2, line = 3, text = "Abundance", cex = 1.1)
-    } else{}
-    if(h == 1){
-        legend("topleft", c(expression(paste(italic("T. castaneum"), " (Data)", sep = "")), "95% prediction interval (Model)"), col = c("black", col.cast), bty = "n", pch = c(15, 15), lty = c("solid", NA, NA), cex = 1.4, pt.cex = c(1.1, 1.2), inset = 0.05)
-    } else{}
-    mtext(side = 3, bquote(paste(bold(.(LETTERS[h])), "     Generation ", .(gens[h]))), adj = 0, cex = 1.1)
+    legend("topleft", c("95% prediction interval (Model)", expression(paste(italic("T. castaneum"), " (Data)", sep = ""))), col = c(col.cast, "black"), bty = "n", pch = c(15, 15), lty = c(NA, "solid"), cex = 1, pt.cex = c(1, 1), inset = 0.05)
+    mtext(side = 3, expression(paste(bold("A"), "  No competition (", italic("Generation 8"), ")")), adj = 0, cex = 1.3)
 }
-dev.off()
 
-# Humid, Competition
-## Make pdf
-pdf(file = "Competition-NoRestart.pdf", width = 16, height = 8, onefile = TRUE)
-par(mfrow = c(2, 4), mar = c(4, 1.5, 2, 0), oma = c(1, 3, 0, 0)) # 2 rows, 4 columns
+par(mar = c(5, 2, 2, 4))
 ## Plotting loop
 for(h in 1:length(gens)){
     temp.current <- subset(landscapes, TREATMENT == "D" & GENERATION == gens[h])
@@ -116,41 +101,27 @@ for(h in 1:length(gens)){
     ## Plot real data
     plot(NA, xlim = c(1, 16), ylim = c(0, 700),
          xaxt = "n", yaxt = "n", bty = "n",
-         ylab = ylabels[h], xlab = xlabels[h], cex.lab = 1.5)
-    axis(1, at = seq(1, 16, 1), tcl = -.5, cex = .95)
-    if(h == 1 | h == 5){
-        axis(2, at = seq(0, 700, 100), tcl = -.5, pos = .7, las = 1)
-    } else{
-        axis(2, at = seq(0, 700, 100), tcl = -.5, pos = .7, labels = FALSE)
-    }
+         ylab = "", xlab = "Patch number", cex.lab = 1.4)
+    axis(1, at = seq(1, 16, 1), tcl = -.5, cex = 1)
+    axis(2, at = seq(0, 700, 100), tcl = -.5, pos = .7, las = 1)
     nonzeroesN <- which(tempN.simulation$Mean > 0)
     nonzeroesM <- which(tempM.simulation$Mean > 0)
-    polygon(x = c(nonzeroesM, rev(nonzeroesM)), y = c(tempM.simulation[nonzeroesM, "Lower"], rev(tempM.simulation[nonzeroesM, "Upper"])), col = col.conf, border = "brown", lty = NULL)
-    polygon(x = c(nonzeroesN, rev(nonzeroesN)), y = c(tempN.simulation[nonzeroesN, "Lower"], rev(tempN.simulation[nonzeroesN, "Upper"])), col = col.cast, border = "black", lty = NULL)
+    polygon(x = c(nonzeroesM, rev(nonzeroesM)), y = c(tempM.simulation[nonzeroesM, "Lower"], rev(tempM.simulation[nonzeroesM, "Upper"])), col = col.conf, border = NA)
+    polygon(x = c(nonzeroesN, rev(nonzeroesN)), y = c(tempN.simulation[nonzeroesN, "Lower"], rev(tempN.simulation[nonzeroesN, "Upper"])), col = col.cast, border = NA)
     for(i in 1:length(refs.current)){
-        if(h == 2 & refs.current[i] == 15){
-            temp.real <- subset(temp.current, REFERENCE_ID == refs.current[i])
-            temp.real <- temp.real[order(temp.real$PATCH), ]
-            temp.real <- subset(temp.real, PATCH > 5)
-        } else{
-            temp.real <- subset(temp.current, REFERENCE_ID == refs.current[i] & CONFCOUNT > 0)
-            temp.real <- temp.real[order(temp.real$PATCH), ]
-        }
+        temp.real <- subset(temp.current, REFERENCE_ID == refs.current[i] & CONFCOUNT > 0)
+        temp.real <- temp.real[order(temp.real$PATCH), ]
         points(CONFCOUNT ~ PATCH, data = temp.real, type = "l", pch = 2, lty = "dotted")
-        points(CONFCOUNT ~ PATCH, data = temp.real, type = "p", pch = 2, cex = 0.8)
+        points(CONFCOUNT ~ PATCH, data = temp.real, type = "p", pch = 2, cex = 1)
     }
     for(i in 1:length(refs.current)){
         temp.real <- subset(temp.current, REFERENCE_ID == refs.current[i] & CASTCOUNT > 0)
         temp.real <- temp.real[order(temp.real$PATCH), ]
         points(CASTCOUNT ~ PATCH, data = temp.real, type = "l", pch = 15)
-        points(CASTCOUNT ~ PATCH, data = temp.real, type = "p", pch = 15, cex = 0.8)
+        points(CASTCOUNT ~ PATCH, data = temp.real, type = "p", pch = 15, cex = 1)
     }
-    if(h == 1 | h == 5){
-        mtext(side = 2, line = 3, text = "Abundance", cex = 1.1)
-    } else{}
-    if(h == 1){
-        legend("topleft", c(expression(paste(italic("T. castaneum"), " (Data)", sep = "")), "95% prediction interval (Model)", "", expression(paste(italic("T. confusum"), " (Data)", sep = "")), "95% prediction interval (Model)"), col = c("black", col.cast, NA, "black", col.conf), bty = "n", pch = c(15, 15, NA, 2, 15), lty = c("solid", NA, NA, "dotted", NA), cex = 1.4, pt.cex = c(1.1, 1.2, NA, 1.1, 1.2), inset = 0.05)
-    } else{}
-    mtext(side = 3, bquote(paste(bold(.(LETTERS[h])), "     Generation ", .(gens[h]))), adj = 0, cex = 1.1, xpd = TRUE)
+    legend("topleft", c(expression("95% prediction interval (Model)", paste(italic("T. castaneum"), " (Data)", sep = "")), "", "95% prediction interval (Model)", expression(paste(italic("T. confusum"), " (Data)", sep = ""))), col = c(col.cast, "black", NA, col.conf, "black"), bty = "n", pch = c(15, 15, NA, 15, 2), lty = c(NA, "solid", NA, NA, "dotted"), cex = 1, pt.cex = c(1, 1, NA, 1, 1), inset = 0.05)
+    mtext(side = 3, expression(paste(bold("B"), "  Competition (", italic("Generation 8"), ")")), adj = 0, cex = 1.3)
 }
+
 dev.off()

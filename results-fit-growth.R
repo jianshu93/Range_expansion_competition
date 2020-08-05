@@ -80,7 +80,7 @@ for(i in 1:length(aa.wet.conf)){
 
 # Plot
 pdf(file="Fits-Growth.pdf", height = 6, width = 12)
-par(mar = c(2, 6, 2, 6), mfrow = c(1, 2))
+par(mar = c(2, 5, 2, 2), mfrow = c(1, 2))
 ## Panel A - T castaneum
 ### Plot points
 scatter3D(x = stor.wet.cast0[, 1],
@@ -125,14 +125,14 @@ scatter3D(x = stor.wet.castY[, 1],
           add = TRUE)
 ### Axes labels
 dims <- par("usr")
-text(x = dims[1] + 0.85 * diff(dims[1:2]),
-     y = dims[3] + 0.1 * diff(dims[3:4]),
+text(x = dims[1] + 0.9 * diff(dims[1:2]),
+     y = dims[3] + 0.14 * diff(dims[3:4]),
      expression(paste(italic("N")[t])), cex = 1.5, xpd = TRUE)
 text(x = dims[1] + 0.25 * diff(dims[1:2]),
-     y = dims[3] + 0.1 * diff(dims[3:4]),
+     y = dims[3] + 0.05 * diff(dims[3:4]),
      expression(paste(italic("M")[t])), cex = 1.5, xpd = TRUE)
-text(x = dims[1] - 0.2 * diff(dims[1:2]),
-     y = dims[3] + 0.52 * diff(dims[3:4]),
+text(x = dims[1] - 0.09 * diff(dims[1:2]),
+     y = dims[3] + 0.45 * diff(dims[3:4]),
      expression(paste(italic("N")[t+1])), cex = 1.5, xpd = TRUE)
 ### Add slices
 slice3D (aa.wet.cast, bb.wet.cast, cc.wet.cast,
@@ -145,7 +145,7 @@ slice3D (aa.wet.cast, bb.wet.cast, cc.wet.cast,
          d = 5,
          colkey = FALSE,
          add = TRUE)
-mtext(side = 3, text = expression(paste(bold("A "), italic("T. castaneum"), sep = "")), adj = 0)
+mtext(side = 3, text = expression(paste(bold("A      "), italic("T. castaneum"), sep = "")), adj = 0)
 
 ## Panel B - T confusum
 ### Plot points
@@ -191,14 +191,14 @@ scatter3D(x = stor.wet.confY[, 2],
           add = TRUE)
 ### Axes labels
 dims <- par("usr")
-text(x = dims[1] + 0.85 * diff(dims[1:2]),
-     y = dims[3] + 0.1 * diff(dims[3:4]),
+text(x = dims[1] + 0.9 * diff(dims[1:2]),
+     y = dims[3] + 0.14 * diff(dims[3:4]),
      expression(paste(italic("M")[t])), cex = 1.5, xpd = TRUE)
 text(x = dims[1] + 0.25 * diff(dims[1:2]),
-     y = dims[3] + 0.1 * diff(dims[3:4]),
+     y = dims[3] + 0.05 * diff(dims[3:4]),
      expression(paste(italic("N")[t])), cex = 1.5, xpd = TRUE)
-text(x = dims[1] - 0.2 * diff(dims[1:2]),
-     y = dims[3] + 0.52 * diff(dims[3:4]),
+text(x = dims[1] - 0.09 * diff(dims[1:2]),
+     y = dims[3] + 0.45 * diff(dims[3:4]),
      expression(paste(italic("M")[t+1])), cex = 1.5, xpd = TRUE)
 ### Add slices
 slice3D (aa.wet.conf, bb.wet.conf, cc.wet.conf,
@@ -211,6 +211,6 @@ slice3D (aa.wet.conf, bb.wet.conf, cc.wet.conf,
          d = 5,
          colkey = FALSE,
          add = TRUE)
-mtext(side = 3, text = expression(paste(bold("B "), italic("T. confusum"), sep = "")), adj = 0)
+mtext(side = 3, text = expression(paste(bold("B      "), italic("T. confusum"), sep = "")), adj = 0)
 
 dev.off()

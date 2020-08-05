@@ -25,7 +25,7 @@ dataM.wet0 <- dataM.wet * 0
 dataM.wet0[, 1] <- rowSums(dataM.wet)
 
 pdf(file="Fits-Dispersal.pdf", height = 6, width = 12)
-par(mar = c(2, 6, 6, 5), mfrow = c(1, 2))
+par(mar = c(2, 5, 2, 2), mfrow = c(1, 2))
 # Base plot
 ## T castaneum
 scatter3D(x = seq(1,  5),
@@ -42,7 +42,7 @@ scatter3D(x = seq(1,  5),
           xlab = "",
           ylab = "",
           zlab = "",
-          theta = 330,
+          theta = 310,
           phi = 30,
           d = 5,
           bty = "g",
@@ -82,13 +82,13 @@ for(i in 2:nrow(dataN.wet)){
 }
 # Add labels
 dims <- par("usr")
-text(x = dims[1] + 0.75 * diff(dims[1:2]),
-     y = dims[3] + 0.03 * diff(dims[3:4]),
+text(x = dims[1] + .92 * diff(dims[1:2]),
+     y = dims[3] + 0.09 * diff(dims[3:4]),
      c("Patch number"), cex = 1.3, xpd = TRUE)
-text(x = dims[1] + 0.09 * diff(dims[1:2]),
-     y = dims[3] + 0.16 * diff(dims[3:4]),
+text(x = dims[1] + 0.22 * diff(dims[1:2]),
+     y = dims[3] + 0.07 * diff(dims[3:4]),
      expression(paste(italic("N")["1,t"])), cex = 1.3, xpd = TRUE)
-text(x = dims[1] - 0.15 * diff(dims[1:2]),
+text(x = dims[1] - 0.08 * diff(dims[1:2]),
      y = dims[3] + 0.52 * diff(dims[3:4]),
      expression(paste(italic("N")["x,t+1"])), cex = 1.3, xpd = TRUE)
 # Add dispersal lines
@@ -109,8 +109,8 @@ surf3D(x = xxs,
        colvar = NULL,
        add = TRUE,
        col = rgb(0, 0.8, 0, alpha = 0.7),
-       alpha = 0.35)
-mtext(side = 3, text = expression(paste(bold("A "), italic("T. castaneum "), sep = "")), adj = 0)
+       alpha = 0.2)
+mtext(side = 3, text = expression(paste(bold("A      "), italic("T. castaneum "), sep = "")), adj = 0)
 
 ## T confusum
 scatter3D(x = seq(5,  9),
@@ -127,7 +127,7 @@ scatter3D(x = seq(5,  9),
           xlab = "",
           ylab = "",
           zlab = "",
-          theta = 330,
+          theta = 310,
           phi = 30,
           d = 5,
           bty = "g",
@@ -167,13 +167,13 @@ for(i in 2:nrow(dataM.wet)){
 }
 # Add labels
 dims <- par("usr")
-text(x = dims[1] + 0.75 * diff(dims[1:2]),
-     y = dims[3] + 0.03 * diff(dims[3:4]),
+text(x = dims[1] + 0.92 * diff(dims[1:2]),
+     y = dims[3] + 0.09 * diff(dims[3:4]),
      c("Patch number"), cex = 1.3, xpd = TRUE)
-text(x = dims[1] + 0.09 * diff(dims[1:2]),
-     y = dims[3] + 0.16 * diff(dims[3:4]),
+text(x = dims[1] + 0.22 * diff(dims[1:2]),
+     y = dims[3] + 0.07 * diff(dims[3:4]),
      expression(paste(italic("M")["1,t"])), cex = 1.3, xpd = TRUE)
-text(x = dims[1] - 0.15 * diff(dims[1:2]),
+text(x = dims[1] - 0.08 * diff(dims[1:2]),
      y = dims[3] + 0.52 * diff(dims[3:4]),
      expression(paste(italic("M")["x,t+1"])), cex = 1.3, xpd = TRUE)
 # Add dispersal lines
@@ -194,7 +194,7 @@ surf3D(x = xxs,
        colvar = NULL,
        add = TRUE,
        col = rgb(0, 0.8, 0, alpha = 0.7),
-       alpha = 0.35)
-mtext(side = 3, text = expression(paste(bold("B "), italic("T. confusum "), sep = "")), adj = 0)
+       alpha = 0.2)
+mtext(side = 3, text = expression(paste(bold("B      "), italic("T. confusum "), sep = "")), adj = 0)
 
 dev.off()
