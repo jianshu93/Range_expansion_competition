@@ -32,7 +32,7 @@ for(i in 1:length(param.wet)){
     stor <- rbind(stor, stor.temp)
 }
 
-pdf(file= "Figs/Bootstrap.pdf", width = 14, height = 8)
+pdf(file= "Growth-Bootstrap.pdf", width = 14, height = 8)
 
 par(mfrow = c(2, 3), mar = c(5, 5, 3, 0))
 # R
@@ -93,7 +93,7 @@ plot(NA, xlim = c(0, 3), ylim = c(0.1, 0.3),
      xaxt = "n", yaxt = "n", bty = "n",
      ylab = "", xlab = "Parameter", cex.lab = 1.5)
 axis(1, seq(0, 3, 3), tcl = 0, labels = FALSE)
-axis(1, seq(1, 2, 1), tcl = -.5, labels = c(expression(italic("KD")[n]), expression(italic("KD")[m])), cex.axis = 1.5)
+axis(1, seq(1, 2, 1), tcl = -.5, labels = c(expression(italic("k")["D,n"]), expression(italic("k")["D,m"])), cex.axis = 1.5)
 axis(2, at = seq(.10, .3, .04), tcl = -.5, las = 1)
 sub1 <- subset(stor, Parameter %in% "KDn")
 arrows(x0 = 1, y0 = sub1$Lower95[1], y1 = sub1$Upper95[1], length = 0.05, angle = 90, code = 3)
@@ -106,7 +106,7 @@ plot(NA, xlim = c(0, 3), ylim = c(6, 12),
      xaxt = "n", yaxt = "n", bty = "n",
      ylab = "", xlab = "Parameter", cex.lab = 1.5)
 axis(1, seq(0, 3, 3), tcl = 0, labels = FALSE)
-axis(1, seq(1, 2, 1), tcl = -.5, labels = c(expression(italic("KE")[n]), expression(italic("KE")[m])), cex.axis = 1.5)
+axis(1, seq(1, 2, 1), tcl = -.5, labels = c(expression(italic("k")["E,n"]), expression(italic("k")["E,m"])), cex.axis = 1.5)
 axis(2, at = seq(6, 12, 1), tcl = -.5, las = 1)
 sub1 <- subset(stor, Parameter == "KEm")
 arrows(x0 = 2, y0 = sub1$Lower95[1], y1 = sub1$Upper95[1], length = 0.05, angle = 90, code = 3)
