@@ -14,8 +14,8 @@ source("fit_exponent.R")
 # Options
 ylim <- c(0,50)  #ylims for plots: c(0,50) for zoomed in, or c(0,250)
 gens <- 2:100    #generations to process and save data for
-gens2plot <- c(2:5,seq(10,100,10)) #which generations to plot (must be subset of gens)
-dirpath <- "/mnt/md0raid1_2tb/geoff_bigfiles/localsensitivity/"  #put directory path here
+gens2plot <- c(2:5,seq(10,100,10)) #which generations to plot (must subset of gens)
+dirpath <- "/mnt/md0raid1_2tb/geoff_bigfiles/BAMextras/"  #put directory path here
 
 # Get the names of the saved simulation output files
 fnames <- list.files(dirpath)
@@ -79,6 +79,7 @@ for ( f in fnames ) {
     for ( i in 1:length(gens) ) {
         if ( dataID == "alphanm-0" & gens[i] > 50 ) break  #hits end after 50 generations
         if ( dataID == "alphanm-0.75" & gens[i] > 80 ) break  #hits end after 80 generations
+        if ( dataID == "Fn-0.75" & gens[i] > 80 ) break  #hits end after 80 generations
         if ( dataID == "alphamn-0" ) up_abun <- 10           #has reduced carrying capacity
         if ( f == "dataN-simulate-long-wetnocomp-sensitivity-Fn-1.5" & gens[i] > 90 ) break #hits end after 90 generations
         taildata <- subset(stor, (Generation == gens[i]) & (Mean < up_abun) & (Mean > lo_abun) )

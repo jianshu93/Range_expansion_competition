@@ -65,7 +65,9 @@ plot(x,c_hat)
 # for this smooth is neat computationally because we leave out the data point we
 # want to predict and then we predict for it, and only it, saving a lot of
 # computation.
-# CV suggests best fit is sigma < 13 for all parameters.
+# CV suggests best fit is sigma < 13 for all parameters but we'll take it just
+# slightly wider at sigma = 15 to improve stability of the fit and make it a
+# little smoother.
 p = unique(exponents$par)[3] #parameter
 pv <- 0.95 #parameter value
 tmp <- subset(exponents,par==p & parval == pv & gen > 5 & gen < 101)
@@ -110,24 +112,82 @@ ksmooth <- function( df, x, sigma ) {
     return(y)
 }
 
-# We can considerably reduce the Monte Carlo noise by smoothing the exponents
-# first. We'll use the kernel smooth function we derived above.
+
+# ---- Figure S11
+# 4 panel plot of shape exponent versus generation with smoothed inverse
+# generation model
+windows(6,6)
+op <- par(mfrow=c(2,2),mar=c(1,1,0,0),oma=c(4,4,0.2,0.2))
+
+# Set up colors
+parvals <- c(0.75,1.25,1) #plotting order for parameter values
+ggplotcols <- hue_pal(h = c(0, 360) + 15, c = 100, l = 65, h.start = 0, direction = 1)
+pvcols <- ggplotcols(length(parvals))[c(3,1,2)]
+pvcols[3] <- "black"
+
+# Plot exponents and fit smoothed curve
+parnames <- c("alphamn","alphanm","Fn","Fm") #plotting order of parameters
+parexp <- c(expression(alpha[mn]),expression(alpha[nm]),expression(italic(G)[n]),expression(italic(G)[m]))
+
+for ( p in parnames ) {
+    
+    plot(NA,NA,xlim=c(0,100),ylim=c(0,0.5),type="n",axes=FALSE,ann=FALSE)
+    # Axes
+    if ( p %in% parnames[c(3,4)] ) {
+        axis(1)
+    } else {
+        axis(1,labels=FALSE)
+    }
+    if ( p %in% parnames[c(1,3)] ) {
+        axis(2,las=2)
+    } else {
+        axis(2,labels=FALSE)
+    }
+    # Steepness annotation
+    if ( p %in% parnames[1] ) {
+        # Annotation
+        arrows(100,0.15,100,0.4,length=0.1)
+        text(100-3, (0.15 + 0.4)/2, "steeper",srt=90)
+    }
+    # Legend
+    if ( p %in% parnames[2] ) {
+        legend("topright",legend=paste(parvals*100,"%",sep="")[c(1,3,2)],
+               lty=1,pch=1,col=pvcols[c(1,3,2)],bty="n")
+    }
+    # Data and smooth curve
+    for ( pv in parvals ) {
+        tmp <- subset(exponents, par==p & parval == pv & 
+                          gen > 5 & gen < 101 & !is.na(exponent))
+        with(tmp,points(gen,exponent,col=pvcols[parvals==pv]))
+        
+        # Smooth of inverse generation model
+        x <- seq(min(tmp$gen),max(tmp$gen),length.out=200)
+        y <- ksmooth( df=tmp, x, sigma = 15)
+        lines(x,y,col=pvcols[parvals==pv])
+    }
+    # Plot label
+    text(50, 0.9*0.5, parexp[parnames==p], adj=1 )
+}
+mtext("Generation",side=1,line=2.5,outer=TRUE)
+mtext(expression( "Wave shape, " * italic(b) ),side=2,line=2.5,outer=TRUE)
+par(op)
+
+
+# For the local sensitivity analysis, we can considerably reduce the Monte Carlo
+# noise by smoothing the exponents first. We'll use the kernel smooth function
+# we derived above.
 
 # First compile smoothed exponents into a data frame. This will take 5 mins.
 exponent_hats <- NULL
 for ( p in c("alphamn","alphanm","Fm","Fn") ) {
     print(p)
-    parvals <- seq(0.95,1.05,by=0.01) #need to match the simulation values
+    parvals <- seq(0.95,1.05,by=0.01) #needs to match the simulation values
     for ( pv in parvals ) {
         tmp <- subset(exponents, par==p & parval == pv & 
                           gen > 4 & gen < 101 & !is.na(exponent))
         # Kernel smooth of inverse generation model
         x <- tmp$gen #we want to predict at each generation
-        if ( p == "Fm" & pv == 0.95 ) { #this one needs more smoothing
-            exponent_hat <- ksmooth(tmp,x,sigma=20) 
-        } else {
-            exponent_hat <- ksmooth(tmp,x,sigma=15)
-        }
+        exponent_hat <- ksmooth(tmp,x,sigma=15) 
         n <- length(exponent_hat)
         this_set <- data.frame(par=rep(p,n),parval=rep(pv,n),exponent_hat=exponent_hat,gen=5:100)
         exponent_hats <- rbind(exponent_hats,this_set)
@@ -153,7 +213,7 @@ for ( p in c("alphamn","alphanm","Fm","Fn") ) {
 #     theme(axis.text=element_blank(),axis.ticks=element_blank(),
 #           panel.grid=element_blank())
 
-# Figure 4
+# ---- Figure 4
 windows(6,6)
 par(mar=c(4,4,0.2,0.2)) #square
 
