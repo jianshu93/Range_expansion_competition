@@ -1,6 +1,6 @@
 # Calculate sensitivities from estimated exponents
 
-# Exponents were first estimated using "sensitivity-local-exponents.R" run on
+# Exponents were first estimated using "analysis-sensitivity-wave.R" run on
 # the lab server and saved to "estimated_exponents.csv".
 
 # Brett Melbourne
