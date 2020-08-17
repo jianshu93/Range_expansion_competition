@@ -1,9 +1,6 @@
 # Plots fitted exponents for an exponential approximation to the wave front.
 # For T. castaneum. For the best-fitting competition model only.
 #
-# Code essentially the same as  "sensitivity-local-exponents.R", which does
-# this for different parameter combinations.
-#
 # Brett Melbourne
 # 13 Aug 2020
 
@@ -13,7 +10,7 @@ source("fit_exponent.R")
 gens2plot <- c(2:5,seq(10,100,10))
 
 # Read data
-fpath <- "/mnt/md0raid1_2tb/geoff_bigfiles/dataN-simulate-long-wetcomp.csv"
+fpath <- "simulations/dataN-simulate-long-wetcomp.csv"
 dataN <- read.csv(fpath, header = FALSE, stringsAsFactors = FALSE)
 colnames(dataN) <- c("Replicate", "Generation", 1:200)
 unique(dataN$Generation)
@@ -36,19 +33,24 @@ for ( g in gens2plot ) {
 stor$Mean[stor$Mean == 0] <- NA
 head(stor)
 
+
+pdf(file = "Figure S10 Fit.pdf", width = 7, height = 9)
+
 # Draw figure with two panels
-par(mfrow=c(2,1),mar=c(4,4,0.2,0.2))
+par(mfrow=c(2,1),mar=c(5, 5, 2, 2))
 
 # ---- Panel A
 plot(NA, xlim = c(1, 200), ylim = c(0,200), ylab = "Mean abundance", xlab = "Patch number", bty = "n",
      xaxt = "n", yaxt = "n", cex.lab = 1.2)
 axis(1, at = seq(1, 20, by = 19), tcl = -.5)
 axis(1, at = seq(20, 200, by = 20), tcl = -.5)
-axis(2, at = seq(0, 250, 10), tcl = -.5, las = 1, pos = -3)
+axis(2, at = seq(0, 200, 50), tcl = -.5, las = 1, pos = -3)
 for ( g in gens2plot ) {
     temp <- subset(stor, Generation == g)
     points(Mean ~ Patch, data = temp, col = rgb(51 / 255, 51 / 255, 51 / 255, alpha = .8),cex=0.5)
 }
+mtext(side = 3, expression(paste(bold("A"))), adj = 0, cex = 1.3)
+legend("topright", adj = 0, lty = c(NA, "solid"), c(expression(paste(italic("T. castaneum"), " (Simulations)")), "Fitted exponential model"), bty = "n", pch = c(1, NA), cex = .9, col = c("black", "red"), inset = 0.05, lwd = c(1, 2))
 
 # Plot fitted exponential model to tail
 for ( g in gens2plot ) {
@@ -68,6 +70,7 @@ for ( g in gens2plot ) {
     temp <- subset(stor, Generation == g & Mean < 20)
     points(Mean ~ Patch, data = temp, col = rgb(51 / 255, 51 / 255, 51 / 255, alpha = .8),cex=0.5)
 }
+mtext(side = 3, expression(paste(bold("B"))), adj = 0, cex = 1.3)
 
 # Plot fitted exponential model to tail
 up_abun <- 20 #upper threshold for abundance
@@ -78,5 +81,6 @@ for ( g in gens2plot ) {
     lines(taildata$Patch,expfit$ypred,col="red")
 }
 
+dev.off()
 
 

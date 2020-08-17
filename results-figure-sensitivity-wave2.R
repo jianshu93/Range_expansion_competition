@@ -1,8 +1,7 @@
 # Calculate sensitivities from estimated exponents
 
 # Exponents were first estimated using "sensitivity-local-exponents.R" run on
-# the lab server and saved to "estimated_exponents.csv". We try a couple of
-# different approaches to estimate sensitivity with improved precision.
+# the lab server and saved to "estimated_exponents.csv".
 
 # Brett Melbourne
 # 13 Aug 2020
@@ -28,8 +27,6 @@ head(exponents)
 names(exponents)
 unique(exponents$par)
 unique(exponents$parval)
-
-
 
 # Kernel smooth of inverse generation model 
 # for single combination of parameter and parameter value
@@ -114,35 +111,24 @@ ksmooth <- function( df, x, sigma ) {
 
 
 # ---- Figure S11
-# 4 panel plot of shape exponent versus generation with smoothed inverse
-# generation model
-windows(6,6)
-op <- par(mfrow=c(2,2),mar=c(1,1,0,0),oma=c(4,4,0.2,0.2))
+# 4 panel plot of shape exponent versus generation with smoothed inverse generation model
+pdf(file = "Figure S11.pdf", width = 12, height = 9)
 
+op <- par(mfrow=c(2,2),mar=c(5, 5, 2, 2))
 # Set up colors
 parvals <- c(0.75,1.25,1) #plotting order for parameter values
 ggplotcols <- hue_pal(h = c(0, 360) + 15, c = 100, l = 65, h.start = 0, direction = 1)
 pvcols <- ggplotcols(length(parvals))[c(3,1,2)]
 pvcols[3] <- "black"
-
 # Plot exponents and fit smoothed curve
 parnames <- c("alphamn","alphanm","Fn","Fm") #plotting order of parameters
 parexp <- c(expression(alpha[mn]),expression(alpha[nm]),expression(italic(G)[n]),expression(italic(G)[m]))
 
-for ( p in parnames ) {
-    
-    plot(NA,NA,xlim=c(0,100),ylim=c(0,0.5),type="n",axes=FALSE,ann=FALSE)
+for ( p in parnames ) {    
+    plot(NA,NA,xlim=c(0,100),ylim=c(0,0.5), bty = "n", xaxt = "n", yaxt = "n", xlab = "Generation", ylab = expression("Wave shape, " * italic(b)))
     # Axes
-    if ( p %in% parnames[c(3,4)] ) {
-        axis(1)
-    } else {
-        axis(1,labels=FALSE)
-    }
-    if ( p %in% parnames[c(1,3)] ) {
-        axis(2,las=2)
-    } else {
-        axis(2,labels=FALSE)
-    }
+    axis(1)
+    axis(2, las = 1)
     # Steepness annotation
     if ( p %in% parnames[1] ) {
         # Annotation
@@ -150,7 +136,7 @@ for ( p in parnames ) {
         text(100-3, (0.15 + 0.4)/2, "steeper",srt=90)
     }
     # Legend
-    if ( p %in% parnames[2] ) {
+    if ( p %in% parnames[1] ) {
         legend("topright",legend=paste(parvals*100,"%",sep="")[c(1,3,2)],
                lty=1,pch=1,col=pvcols[c(1,3,2)],bty="n")
     }
@@ -159,99 +145,28 @@ for ( p in parnames ) {
         tmp <- subset(exponents, par==p & parval == pv & 
                           gen > 5 & gen < 101 & !is.na(exponent))
         with(tmp,points(gen,exponent,col=pvcols[parvals==pv]))
-        
-        # Smooth of inverse generation model
+    # Smooth of inverse generation model
         x <- seq(min(tmp$gen),max(tmp$gen),length.out=200)
         y <- ksmooth( df=tmp, x, sigma = 15)
         lines(x,y,col=pvcols[parvals==pv])
     }
     # Plot label
-    text(50, 0.9*0.5, parexp[parnames==p], adj=1 )
-}
-mtext("Generation",side=1,line=2.5,outer=TRUE)
-mtext(expression( "Wave shape, " * italic(b) ),side=2,line=2.5,outer=TRUE)
-par(op)
-
-
-# For the local sensitivity analysis, we can considerably reduce the Monte Carlo
-# noise by smoothing the exponents first. We'll use the kernel smooth function
-# we derived above.
-
-# First compile smoothed exponents into a data frame. This will take 5 mins.
-exponent_hats <- NULL
-for ( p in c("alphamn","alphanm","Fm","Fn") ) {
     print(p)
-    parvals <- seq(0.95,1.05,by=0.01) #needs to match the simulation values
-    for ( pv in parvals ) {
-        tmp <- subset(exponents, par==p & parval == pv & 
-                          gen > 4 & gen < 101 & !is.na(exponent))
-        # Kernel smooth of inverse generation model
-        x <- tmp$gen #we want to predict at each generation
-        exponent_hat <- ksmooth(tmp,x,sigma=15) 
-        n <- length(exponent_hat)
-        this_set <- data.frame(par=rep(p,n),parval=rep(pv,n),exponent_hat=exponent_hat,gen=5:100)
-        exponent_hats <- rbind(exponent_hats,this_set)
-        rm(tmp,x,exponent_hat,n,this_set)
-        print(pv)
+    if( p %in% parnames[1] ){
+        mtext(side = 3, expression(paste(bold("A"), "  ", italic(alpha)["mn"])), adj=0 )
     }
-}
-# save(exponent_hats,file="exponent_hats.RData")
-# load("exponent_hats.RData")
-
-
-# We see this has improved the noise and remains linear
-# Check parameters one at a time
-# require(ggplot2)
-# require(dplyr)
-# p <- unique(exponent_hats$par)[3]     #change 1 thru 4
-# p
-# exponent_hats %>%
-#     filter(par==p, gen > 4, parval > 0.94, parval < 1.06) %>%
-#     ggplot() +
-#     geom_point(mapping = aes(x=parval,y=exponent_hat),shape=1) +
-#     facet_wrap(facets = ~ gen,scales="free") +
-#     theme(axis.text=element_blank(),axis.ticks=element_blank(),
-#           panel.grid=element_blank())
-
-# ---- Figure 4
-windows(6,6)
-par(mar=c(4,4,0.2,0.2)) #square
-
-# Set up colors (ggplot palette from scales package)
-ggplotcols <- hue_pal(h = c(0, 360) + 15, c = 100, l = 65, h.start = 0, direction = 1)
-parcols <- ggplotcols(4) #[c(3,1,2)]
-
-# Plotting space
-plot(NA,NA,xlim=c(-3,100),ylim=c(-1.25,0.5),type="n",axes=FALSE,ann=FALSE)
-axis(1)
-axis(2)
-abline(h=0,col="gray")
-box()
-mtext("Generation",side=1,line=2.5)
-mtext("Sensitivity of wave shape",side=2,line=2.5)
-
-# Calculate and plot sensitivities
-parnames <- c("alphamn","alphanm","Fm","Fn") #plotting order of parameters
-for ( p in parnames ) {
-    sensitivity <- rep(NA,100)
-    for ( g in 5:100 ) {
-        tmp <- subset(exponent_hats,par==p & gen == g & parval > 0.94 & parval < 1.06)
-        tmp$exponent_hat <- tmp$exponent_hat/tmp$exponent_hat[tmp$parval==1]
-        fit <- lm(exponent_hat~parval,data=tmp)
-        sensitivity[g] <- coef(fit)["parval"]
+    if( p %in% parnames[2] ){
+        mtext(side = 3, expression(paste(bold("B"), "  ", italic(alpha)["nm"])), adj=0 )
     }
-    lines(5:100,sensitivity[5:100],col=parcols[parnames==p],lwd=2)
+    if( p %in% parnames[3] ){
+        mtext(side = 3, expression(paste(bold("C"), "  ", italic(G)["n"])), adj=0 )
+    }
+    if( p %in% parnames[4] ){
+        mtext(side = 3, expression(paste(bold("D"), "  ", italic(G)["m"])), adj=0 )
+    }
+    else {}
 }
+mtext("Generation",side=1,line=1,outer=TRUE)
+mtext(expression( "Wave shape, " * italic(b) ),side=2,line=1,outer=TRUE)
 
-# Data labels
-lx <- 100
-text(lx,0.45,expression(alpha[mn]),adj=1)
-text(lx,0.14,expression(italic(G)[m]),adj=1)
-text(lx,-0.96,expression(italic(G)[n]),adj=1)
-text(lx,-1.25,expression(alpha[nm]),adj=1)
-
-# Annotation
-arrows(0,-0.2,0,-1,length=0.1)
-text(-3, (-0.2 + -1)/2, "shallower",srt=90)
-arrows(0,0.1,0,0.4,length=0.1)
-text(-3, (0.1 + 0.4)/2, "steeper",srt=90)
+dev.off()

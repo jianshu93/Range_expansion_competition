@@ -11,7 +11,7 @@ palet <- rainbow(length(gens))
 boots <- 5000
 
 ## Plots
-pdf(file = "Figs/Figure 1 X.pdf", width = 7, height = 9)
+pdf(file = "Figure 1.pdf", width = 7, height = 9)
 ##
 
 par(mfrow = c(2, 1), mar = c(5, 5, 2, 1))
@@ -20,7 +20,7 @@ plot(NA, xlim = c(1, 16), ylim = c(0, 400),
      xaxt = "n", yaxt = "n", bty = "n",
      ylab = "Abundance", xlab = "Patch number", cex.lab = 1.4)
 axis(1, seq(1, 16, 1), tcl = -.5)
-axis(2, seq(0, 400, 100), tcl = -.5, las = 1, pos = .7)
+axis(2, seq(0, 400, 100), tcl = -.5, las = 1, pos = .5)
 ##
 gen8.A <- subset(data, TREATMENT == "A" & GENERATION == 8)
 quants.A <- data.frame(PATCH = c(), LOWER = c(), UPPER = c())
@@ -52,17 +52,16 @@ for(i in 1:8){
         points(CASTCOUNT ~ PATCH, data = sing, type = "p", col = palet[i], cex = 1.2, pch = i)
     }
 }
-legend("topright", c("1", "2", "3", "4", "5", "6", "7", "8"), col = palet, inset = .05, pch = 15, bty = "n", title = expression(underline("Generation")), xjust = 1, cex = 1)
-mtext(side = 3, expression(paste(bold("A"))), adj = -.13, cex = 1.4)
-mtext(side = 3, expression(paste("No competition")), adj = 0, cex = 1.4)
-legend(x = 1, y = 415, adj = 0, lty = "solid", c(expression(italic("T. castaneum"))), bty = "n", pch = c(15), cex = 1.2)
+legend("topright", c("1", "2", "3", "4", "5", "6", "7", "8"), col = palet, inset = .05, pch = 15, bty = "n", title = expression(underline("Generation")), xjust = 1, cex = .9)
+mtext(side = 3, expression(paste(bold("A"), "  No competition")), adj = 0, cex = 1.3)
+legend(x = 1, y = 410, adj = 0, lty = "solid", c(expression(italic("T. castaneum"))), bty = "n", pch = c(15), cex = .9)
 
 # Treat D
 plot(NA, xlim = c(1, 16), ylim = c(0, 400),
      xaxt = "n", yaxt = "n", bty = "n",
      ylab = "Abundance", xlab = "Patch number", cex.lab = 1.4)
 axis(1, seq(1, 16, 1), tcl = -.5)
-axis(2, seq(0, 400, 100), tcl = -.5, las = 1, pos = .7)
+axis(2, seq(0, 400, 100), tcl = -.5, las = 1, pos = .5)
 ##
 gen8.D <- subset(data, TREATMENT == "D" & GENERATION == 8)
 quants.D <- data.frame(PATCH = c(), LOWER = c(), UPPER = c())
@@ -107,9 +106,8 @@ for(i in 1:length(gens)){
         points(CONFCOUNT ~ PATCH, data = sing, type = "p", col = palet[i], cex = 1.2, pch = 2)
     }
 }
-mtext(side = 3, expression(paste(bold("B"))), adj = -.13, cex = 1.4)
-mtext(side = 3, expression(paste("Competition")), adj = 0, cex = 1.4)
-legend(x = 1, y = 415, adj = 0, lty = c("solid", "dotted"), c(expression(italic("T. castaneum")), expression(italic("T. confusum"))), bty = "n", pch = c(15, 2), cex = 1.2)
+mtext(side = 3, expression(paste(bold("B"), "  Competition")), adj = 0, cex = 1.3)
+legend(x = 1, y = 410, adj = 0, lty = c("solid", "dotted"), c(expression(italic("T. castaneum")), expression(italic("T. confusum"))), bty = "n", pch = c(15, 2), cex = .9)
 
 
 dev.off()

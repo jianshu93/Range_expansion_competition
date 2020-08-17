@@ -1,7 +1,8 @@
 # Calculates exponents for an exponential approximation to the wave front.
 # For T. castaneum
-# Code extended from "sensitivity-local-EDA.R".
-# First copy all the data files into a directory (with no other files).
+# "dirpath" must be a directory containing simulation data for
+# different parameter values (with no other files).
+# See analysis-simulations-long-sensitivity-X.R to generate these
 
 # Outputs a csv file containing all the exponents, and produces separate pdfs
 # of the fits for each parameter value.
