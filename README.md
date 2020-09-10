@@ -6,6 +6,8 @@ Interspecific competition slows range expansion and shapes range boundaries
 
 The main purpose of these scripts is to allow users to reproduce the analysis and figures from the paper.
 
+*Note: Abundance data for the experimental landscapes can be found [here](/Data/data-counts.csv)*
+
 ## Files (following order in the analysis)
 
 ### analysis-fit-growth
@@ -13,6 +15,10 @@ The main purpose of these scripts is to allow users to reproduce the analysis an
 This script fits stochastic growth models to data from the single-patch replicates. It calls a general purpose likelihood function ("nll-growth.R") and optimizes every combination of 16 probability mass functions (folder /pmf). 
 
 It is strongly recommended that users run this code on a machine with multiple cores. They should also expect long run times (>12 hours) for the more complex stochastic models (e.g., nbinomgammabinom).
+
+### analysis-fit-growth-bestmodel
+
+This script fits the top scoring growth model to data from the single-patch replicates.
 
 ### analysis-fit-dispersal
 
@@ -44,7 +50,7 @@ This script compares abundances predicted by the fitted model with abundances in
 
 ### results-figure3.R
 
-This script visualizes mean abundance over time for the long-term (100 generations) simulations. It requires that this data exist in folder /Data and can be used to recreate Figure 3 in the main text.
+This script visualizes mean abundance over time for the long-term (100 generations) simulations. It requires that data exists in folder /Data and can be used to recreate Figure 3 in the main text.
 
 ### results-figure4.R
 
