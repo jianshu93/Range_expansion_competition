@@ -1,3 +1,6 @@
+# Set seed
+set.seed(202009)
+
 # Source libraries
 library(plyr) # rbind.fill
 library(deSolve) # ODE solver
